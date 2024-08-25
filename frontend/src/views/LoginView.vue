@@ -1,6 +1,8 @@
 <script setup>
     import {ref, onMounted, reactive, watch} from 'vue'
+    import {useServiceStore} from '@/stores/service'
 
+    const serviceStore = useServiceStore()
     const passwordShow = ref(false)
     
     const mode = ref('')
@@ -76,11 +78,12 @@
     },{immediate:true})
 
 
-    const loginHandle = () =>{
-        console.log(loginModel)
+    const loginHandle = async() =>{
+        await serviceStore.loginService(loginModel)
     }
-    const registerHandle = () =>{
-        console.log(registerModel)
+    const registerHandle = async() =>{
+        await serviceStore.registerService(registerModel)
+        mode.value = 'LOGIN'
     }
 
 </script>
@@ -150,7 +153,7 @@
                         Register
                     </button>
 
-                    
+
                     <!-- register mode btn -->
                     <button @click="registerHandle()" 
                             v-if="mode === 'REGISTER'" 
