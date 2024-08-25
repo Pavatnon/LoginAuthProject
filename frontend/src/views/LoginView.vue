@@ -89,6 +89,8 @@
         <div class="flex w-full h-screen justify-center items-center">
             <div class="flex flex-col w-full lg:w-6/12 h-6/12 bg-gray-400/30 p-4 items-center rounded-lg shadow-md">
                 <p class="text-2xl  font-bold">{{mode}}</p>
+
+
                 <!-- LoginForm -->
                 <label v-if="mode === 'LOGIN'" v-for="form, index in loginform" class="form-control w-full max-w-xs">
                     <div class="label">
@@ -100,10 +102,17 @@
                                 class="input input-bordered w-full max-w-xs"
                                 v-model="loginModel[form.field]"
                                 />
-                        <button v-if="form.name === 'Password'" @click="passwordShow = !passwordShow"  class="btn btn-outline">View</button>
+                        <button v-if="form.name === 'Password'" 
+                                @click="passwordShow = !passwordShow"  
+                                class="btn btn-outline"
+                                >
+                            View
+                        </button>
                     </div>
                     <p class="text-red-500">{{ isValidMessage.loginValid[index] }}</p>
                 </label>
+
+                
                 <!-- RegisterForm -->
                 <label v-if="mode === 'REGISTER'" v-for="form, index in registerform" class="form-control w-full max-w-xs">
                     <div class="label">
@@ -115,12 +124,18 @@
                                 class="input input-bordered w-full max-w-xs"
                                 v-model="registerModel[form.field]"
                                 />
-                        <button v-if="form.name === 'Password'" @click="passwordShow = !passwordShow"  class="btn btn-outline">View</button>
+                        <button v-if="form.name === 'Password'" 
+                                @click="passwordShow = !passwordShow" 
+                                class="btn btn-outline"
+                                >
+                            View
+                        </button>
                     </div>
                     <p class="text-red-500">{{ isValidMessage.registerValid[index] }}</p>
                 </label>
                 <div class="flex flex-col items-center w-full my-4 gap-4">
 
+                    <!-- login mode btn -->
                     <button @click="loginHandle()" 
                             v-if="mode === 'LOGIN'" 
                             class="btn btn-primary w-full max-w-xs" 
@@ -135,6 +150,8 @@
                         Register
                     </button>
 
+                    
+                    <!-- register mode btn -->
                     <button @click="registerHandle()" 
                             v-if="mode === 'REGISTER'" 
                             class="btn btn-primary w-full max-w-xs" 
