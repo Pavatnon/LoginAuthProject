@@ -23,6 +23,45 @@ const userShema = new mongoose.Schema({
 
 const User = mongoose.model('userdatas', userShema)
 
+const userAuth = async(req, res, next) =>{
+    const token = req.headers['authorization']
+    if(!token){
+        throw new Error('have not token')
+    }
+
+    try {
+        const authUser = await jwt.verify(token.split(' ')[1], secret)
+        
+
+        if(!authUser){
+            throw new Error('Invalid token')
+        }
+
+        const getUser = await User.findOne({username: authUser.username})
+
+        if (getUser.role !== 'admin') {
+            return res.status(403).json({
+                error: 'Access denied. You do not have the required role.'
+            });
+        }
+
+        req.user = getUser
+        next()
+
+    } catch (error) {
+        console.log(error.message)
+        res.status(401).json({
+            error: error.message
+        })
+    }
+
+}
+app.get('/test', userAuth, (req, res) =>{
+    const getdata = req.user
+
+    res.json(getdata)
+})
+
 app.post('/register', async(req, res) =>{
     const {username, password} = req.body
 
@@ -71,9 +110,8 @@ app.post('/login', async(req, res) =>{
 
         const token = await jwt.sign({
             username,
-            role: user.role
         },secret)
-
+        
         res.status(200).json({
             message: 'Login Success',
             token: token
